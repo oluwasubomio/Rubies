@@ -1,6 +1,6 @@
+import os
 import json
 import pandas as pd
-
 
 def min_max(series):
     min_val = series.min()
@@ -18,7 +18,15 @@ class RubiesEngine:
     No AI, no ML, no learning.
     """
 
-    def __init__(self, config_path="rubies_config.json"):
+    def __init__(self, config_path=None):
+        # If no path provided, use rubies_config.json in the same folder as this file
+        if config_path is None:
+            config_path = "rubies_config.json"
+
+        # Open the JSON safely
+        if not os.path.exists(config_path):
+            raise FileNotFoundError(f"Config file not found: {config_path}")
+
         with open(config_path) as f:
             cfg = json.load(f)
 
