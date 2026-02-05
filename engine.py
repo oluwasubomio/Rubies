@@ -19,9 +19,10 @@ class RubiesEngine:
     """
 
     def __init__(self, config_path=None):
+        print(f"Current working directory: {os.getcwd()}")
         # If no path provided, use rubies_config.json in the same folder as this file
         if config_path is None:
-            config_path = "rubies_config.json"
+            config_path = "./rubies_config.json"
 
         # Open the JSON safely
         if not os.path.exists(config_path):
