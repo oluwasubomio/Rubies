@@ -1,0 +1,14 @@
+{
+  "weights": {
+    "savings": 0.4,
+    "balance": 0.3,
+    "transactions": 0.15,
+    "card_usage": 0.15
+  },
+  "tiers": {
+    "Diamond Elite": 90,
+    "Big Baller": 75,
+    "Side Hustler": 50,
+    "Gemstone": 0
+  }
+}
