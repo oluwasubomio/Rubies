@@ -21,7 +21,7 @@ class RubiesEngine:
     def __init__(self, config_path=None):
         # If no path provided, use rubies_config.json in the same folder as this file
         if config_path is None:
-            config_path = os.path.join(os.path.dirname(__file__), "rubies_config.json")
+            config_path = os.path.join(os.path.dirname(__file__), "rubies_config.JSON")
 
         # Open the JSON safely
         if not os.path.exists(config_path):
