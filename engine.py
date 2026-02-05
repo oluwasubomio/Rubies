@@ -1,5 +1,16 @@
 import os
 import json
+import pandas as pd
+
+def min_max(series):
+    min_val = series.min()
+    max_val = series.max()
+
+    if min_val == max_val:
+        return pd.Series([0.0] * len(series), index=series.index)
+
+    return (series - min_val) / (max_val - min_val)
+
 
 class RubiesEngine:
     """
@@ -23,3 +34,33 @@ class RubiesEngine:
         self.tiers = dict(
             sorted(cfg["tiers"].items(), key=lambda x: x[1], reverse=True)
         )
+
+    def calculate_scores(self, df):
+        df = df.copy()
+
+        df["s_norm"] = min_max(df["savings"])
+        df["b_norm"] = min_max(df["balance"])
+        df["t_norm"] = min_max(df["transactions"])
+        df["c_norm"] = min_max(df["card_usage"])
+
+        df["rubies_score"] = (
+            df["s_norm"] * self.weights["savings"]
+            + df["b_norm"] * self.weights["balance"]
+            + df["t_norm"] * self.weights["transactions"]
+            + df["c_norm"] * self.weights["card_usage"]
+        ) * 100
+
+        return df
+
+    def assign_tier(self, score):
+        for tier, threshold in self.tiers.items():
+            if score >= threshold:
+                return tier
+        return "Unranked"
+
+    def rank_customers(self, df):
+        df = df.sort_values("rubies_score", ascending=False).reset_index(drop=True)
+        df["rank_current"] = df.index + 1
+        df["tier"] = df["rubies_score"].apply(self.assign_tier)
+        return df
+
